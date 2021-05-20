@@ -11,10 +11,8 @@ namespace Api.Areas.Identity.Data
     // Add profile data for application users by adding properties to the User class
     public class User : IdentityUser
     {
-        // Add custom properties to your users
-        // public int MyProperty { get; set; }
 
-        // Setup one to one relation
+        public string FullName { get; set; }
         public virtual UserSettings Settings { get; set; }
         public virtual UserGDPR GDPR { get; set; }
     }

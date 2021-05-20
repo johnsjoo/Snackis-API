@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210518123523_init")]
+    [Migration("20210520093345_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,9 @@ namespace Api.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -90,15 +93,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a0c0f782-017a-4ae6-8f9b-98bd93278be2",
+                            ConcurrencyStamp = "8a776f4c-a835-495c-9577-454dc080178b",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECzFx2mZnMpImyKeRvspOtYwckaEd59GTbjTDEoo/dDsXodECG8TKGpJMgzf3O6V1g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDgWiNvpuip3mnj+4CLdnBnhefr1YhBc3KYuBqgrjaJL3GSOSZ8WgNQF0I25M2JRpQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dfc1e51c-76fb-4cc1-b86e-a43940c1a199",
+                            SecurityStamp = "8ceb6827-a5a6-4ca5-8df7-9d53755b5244",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -128,6 +131,81 @@ namespace Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("Api.Data.Category", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Api.Data.Post", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsReported")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubCategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Api.Data.SubCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoriesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -160,14 +238,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "0f12207e-b02b-42ce-8cb9-2075185039cc",
+                            ConcurrencyStamp = "081e1187-c5be-4d5b-acf5-c2c5cb25f947",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "ca3e573e-bd76-4ec5-a6e0-d9f0f9377d9c",
+                            ConcurrencyStamp = "b2dd5830-0086-4261-8212-ab7e696d277c",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -310,6 +388,30 @@ namespace Api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Api.Data.Post", b =>
+                {
+                    b.HasOne("Api.Data.SubCategory", "SubCategory")
+                        .WithMany("Posts")
+                        .HasForeignKey("SubCategoryId");
+
+                    b.HasOne("Api.Areas.Identity.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("SubCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Api.Data.SubCategory", b =>
+                {
+                    b.HasOne("Api.Data.Category", "Categories")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoriesId");
+
+                    b.Navigation("Categories");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -366,6 +468,16 @@ namespace Api.Migrations
                     b.Navigation("GDPR");
 
                     b.Navigation("Settings");
+                });
+
+            modelBuilder.Entity("Api.Data.Category", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("Api.Data.SubCategory", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Areas.Identity.Data;
+using Api.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,10 @@ namespace Api.Areas.Identity.Data
 
         public DbSet<UserSettings> UserSettings { get; set; }
         public DbSet<UserGDPR> UserGDPR { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
+
 
 
         public Context(DbContextOptions<Context> options)

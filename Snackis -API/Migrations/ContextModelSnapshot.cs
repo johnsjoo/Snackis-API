@@ -38,6 +38,9 @@ namespace Api.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -88,15 +91,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e82e1ecb-530a-4152-afdd-729fcb77d6df",
+                            ConcurrencyStamp = "8a776f4c-a835-495c-9577-454dc080178b",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKe9DkTL/bcvPRijnD4AdoiqGwmzlqnLVFVjkPhb6ppsA46y+txXDlCuxoWS22rEqw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDgWiNvpuip3mnj+4CLdnBnhefr1YhBc3KYuBqgrjaJL3GSOSZ8WgNQF0I25M2JRpQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c7f0b0d4-47ad-4ef8-a798-e2227d1fcd04",
+                            SecurityStamp = "8ceb6827-a5a6-4ca5-8df7-9d53755b5244",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -126,6 +129,81 @@ namespace Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("Api.Data.Category", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Api.Data.Post", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsReported")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubCategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Api.Data.SubCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoriesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -158,14 +236,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "5671adaa-d4d8-4bce-9156-9aad2fd9a5f9",
+                            ConcurrencyStamp = "081e1187-c5be-4d5b-acf5-c2c5cb25f947",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "8005669f-2289-4d23-8dfd-5e5c451da10a",
+                            ConcurrencyStamp = "b2dd5830-0086-4261-8212-ab7e696d277c",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -308,6 +386,30 @@ namespace Api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Api.Data.Post", b =>
+                {
+                    b.HasOne("Api.Data.SubCategory", "SubCategory")
+                        .WithMany("Posts")
+                        .HasForeignKey("SubCategoryId");
+
+                    b.HasOne("Api.Areas.Identity.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("SubCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Api.Data.SubCategory", b =>
+                {
+                    b.HasOne("Api.Data.Category", "Categories")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoriesId");
+
+                    b.Navigation("Categories");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -364,6 +466,16 @@ namespace Api.Migrations
                     b.Navigation("GDPR");
 
                     b.Navigation("Settings");
+                });
+
+            modelBuilder.Entity("Api.Data.Category", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("Api.Data.SubCategory", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }
