@@ -211,14 +211,14 @@ namespace Api.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoriesId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SubCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SubCategories_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -256,17 +256,17 @@ namespace Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "14d0f44f-6155-4758-b2b5-b710aa36f86e", "root", "ROOT" });
+                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "9db6a278-6365-47a1-b5f8-9dc77bd5218a", "root", "ROOT" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "98a61ccc-3dd1-4e42-9a79-e21ccfd6e546", "User", "USER" });
+                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "70178fa3-dc7e-4622-8d6d-7418ab91a2b7", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "0abbb2b1-bd4d-49fb-babd-c65d983c8d64", "admin@core.api", true, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEPf1SJHk6BbGqhQjtce6jUbJK9shiA6Na6hr2i1lgCNbt4bHxxSICSFyYSxXrwTJbQ==", null, false, "1932cc1b-2b57-426b-9748-c3b2b53a1a9b", false, "admin" });
+                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "081d5d77-9817-47e0-b731-13411cb0a83a", "admin@core.api", true, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEMiemj5ajDeCvbZdYUoGuIgEnvC1Hvfh9jvIuFlHTl/OT5Y4rKY+87d6UW2pnB1BQw==", null, false, "2fbbb4b2-eb59-4231-bf6d-3b1676f4e204", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -323,9 +323,9 @@ namespace Api.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubCategories_CategoriesId",
+                name: "IX_SubCategories_CategoryId",
                 table: "SubCategories",
-                column: "CategoriesId");
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

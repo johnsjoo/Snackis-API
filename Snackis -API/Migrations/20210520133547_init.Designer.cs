@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210520095407_init")]
+    [Migration("20210520133547_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,15 +93,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0abbb2b1-bd4d-49fb-babd-c65d983c8d64",
+                            ConcurrencyStamp = "081d5d77-9817-47e0-b731-13411cb0a83a",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPf1SJHk6BbGqhQjtce6jUbJK9shiA6Na6hr2i1lgCNbt4bHxxSICSFyYSxXrwTJbQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMiemj5ajDeCvbZdYUoGuIgEnvC1Hvfh9jvIuFlHTl/OT5Y4rKY+87d6UW2pnB1BQw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1932cc1b-2b57-426b-9748-c3b2b53a1a9b",
+                            SecurityStamp = "2fbbb4b2-eb59-4231-bf6d-3b1676f4e204",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -189,7 +189,7 @@ namespace Api.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CategoriesId")
+                    b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
@@ -203,7 +203,7 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoriesId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("SubCategories");
                 });
@@ -238,14 +238,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "14d0f44f-6155-4758-b2b5-b710aa36f86e",
+                            ConcurrencyStamp = "9db6a278-6365-47a1-b5f8-9dc77bd5218a",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "98a61ccc-3dd1-4e42-9a79-e21ccfd6e546",
+                            ConcurrencyStamp = "70178fa3-dc7e-4622-8d6d-7418ab91a2b7",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -407,7 +407,7 @@ namespace Api.Migrations
                 {
                     b.HasOne("Api.Data.Category", "Categories")
                         .WithMany("SubCategories")
-                        .HasForeignKey("CategoriesId");
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Categories");
                 });

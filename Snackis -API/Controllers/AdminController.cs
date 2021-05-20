@@ -60,5 +60,44 @@ namespace Api.Controllers
                 return Unauthorized();
             }
         }
+
+
+        [HttpPost("CreateSubCategory")]
+
+        public async Task<ActionResult> CreateSubCategory([FromBody] PostSubCategoryModel model)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("root") || roles.Contains("admin"))
+            {
+               
+              // Under uppbyggnad
+                SubCategory subCat = new SubCategory();           
+                var apa2 = _context.Categories
+                .Where(x => x.Id == subCat.CategoryId);
+                subCat.Title = model.Title;
+                subCat.Description = model.Description;
+                var findRightCat = _context.Categories
+                        .Where(x => x.Title == model.Category);
+                
+                try
+                {
+                    _context.SubCategories.Add(subCat);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+
+                return Ok();
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
     }
 }
