@@ -21,7 +21,6 @@ namespace Api.Data
         public SubCategory()
         {
             Id = Guid.NewGuid().ToString();
-            CategoryId = Categories.Id;
         }
     }
 }

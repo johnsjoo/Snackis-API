@@ -28,9 +28,9 @@ namespace Api.Controllers
 
 
 
-        [HttpPost("CreateCategoty")]
+        [HttpPost("CreateCategory")]
 
-        public async Task<ActionResult> CreateCategoty([FromBody] PostCategoryModel model)
+        public async Task<ActionResult> CreateCategory([FromBody] PostCategoryModel model)
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
@@ -71,11 +71,15 @@ namespace Api.Controllers
 
             if (roles.Contains("root") || roles.Contains("admin"))
             {
-               
-              // Under uppbyggnad
-                SubCategory subCat = new SubCategory();           
+                
+                // Under uppbyggnad
+                SubCategory subCat = new SubCategory();
+
+
                 var apa2 = _context.Categories
-                .Where(x => x.Id == subCat.CategoryId);
+                 .FirstOrDefault();
+
+                subCat.CategoryId = apa2.Id;
                 subCat.Title = model.Title;
                 subCat.Description = model.Description;
                 var findRightCat = _context.Categories
