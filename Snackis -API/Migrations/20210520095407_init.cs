@@ -256,17 +256,17 @@ namespace Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "081e1187-c5be-4d5b-acf5-c2c5cb25f947", "root", "ROOT" });
+                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "14d0f44f-6155-4758-b2b5-b710aa36f86e", "root", "ROOT" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "b2dd5830-0086-4261-8212-ab7e696d277c", "User", "USER" });
+                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "98a61ccc-3dd1-4e42-9a79-e21ccfd6e546", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "8a776f4c-a835-495c-9577-454dc080178b", "admin@core.api", true, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEDgWiNvpuip3mnj+4CLdnBnhefr1YhBc3KYuBqgrjaJL3GSOSZ8WgNQF0I25M2JRpQ==", null, false, "8ceb6827-a5a6-4ca5-8df7-9d53755b5244", false, "admin" });
+                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "0abbb2b1-bd4d-49fb-babd-c65d983c8d64", "admin@core.api", true, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEPf1SJHk6BbGqhQjtce6jUbJK9shiA6Na6hr2i1lgCNbt4bHxxSICSFyYSxXrwTJbQ==", null, false, "1932cc1b-2b57-426b-9748-c3b2b53a1a9b", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

@@ -16,6 +16,8 @@ namespace Api.Data
         public Category()
         {
             Id = Guid.NewGuid().ToString();
+
+            Date = DateTime.Now;
         }
     }
 }

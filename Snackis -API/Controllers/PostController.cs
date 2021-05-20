@@ -1,5 +1,6 @@
 ﻿using Api.Areas.Identity.Data;
 using Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,7 +14,7 @@ namespace Api.Controllers
 
     [Route("[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PostController : Controller
     {
         private Context _context;
@@ -29,7 +30,7 @@ namespace Api.Controllers
 
 
 
-        [HttpGet("one")]
+        [HttpPost("create")]
         public ActionResult RateCompany([FromBody] RateCompanyModel rateCompanyModel)
         {
 
