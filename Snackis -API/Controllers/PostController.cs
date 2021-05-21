@@ -1,4 +1,5 @@
 ﻿using Api.Areas.Identity.Data;
+using Api.Data;
 using Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -21,25 +23,44 @@ namespace Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        //public PlayGroundController(Context context, UserManager<User> userManager, SignInManager<User> signInManager)
-        //{
-        //    _context = context;
-        //    _userManager = userManager;
-        //    _signInManager = signInManager;
-        //}
+        public PostController(Context context, UserManager<User> userManager, SignInManager<User> signInManager)
+        {
+            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
 
 
 
         [HttpPost("create")]
-        public ActionResult RateCompany([FromBody] RateCompanyModel rateCompanyModel)
+
+        public async Task<ActionResult> Create([FromBody] PostCreateModel model)
         {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
 
-            var result = new
+            if (user != null)
             {
-                Message = $"You gave {rateCompanyModel.Company} a {rateCompanyModel.Rating} star rating",
-            };
+                Post post = new Post();
+                post.Title = model.Title;
+                post.Content = model.Content;
+                post.Date = DateTime.Now;
 
-            return Ok(result);
+                try
+                {
+                    _context.Posts.Add(post);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+                return Ok();
+            }
+            return Unauthorized();
         }
+
+
     }
 }

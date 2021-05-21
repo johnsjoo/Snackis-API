@@ -26,6 +26,7 @@ namespace Api.Data
         public Post()
         {
             Id = Guid.NewGuid().ToString();
+            IsReported = false;
         }
     }
 }
