@@ -38,13 +38,27 @@ namespace Api.Controllers
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
+            List<string> subCategorysIds = new List<string>();
 
             if (user != null)
             {
-                Post post = new Post();
-                post.Title = model.Title;
-                post.Content = model.Content;
-                post.Date = DateTime.Now;
+                //var allSubCategorys = _context.SubCategories.ToList();
+                //foreach (var subCategory in allSubCategorys)
+                //{
+                //    subCategorysIds.Add(subCategory.Id);
+
+                //}
+                //SubCategory subCat = new SubCategory { 
+                
+                //};
+                Post post = new Post
+                {
+                    Title = model.Title,
+                    Content = model.Content,
+                    Date = DateTime.Now,
+                    UserId = user.Id
+                    
+                };
 
                 try
                 {

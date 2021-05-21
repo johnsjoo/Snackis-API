@@ -21,6 +21,7 @@ namespace Api.Data
         public SubCategory()
         {
             Id = Guid.NewGuid().ToString();
+            Date = DateTime.Now;
         }
     }
 }

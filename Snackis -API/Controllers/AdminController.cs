@@ -27,6 +27,25 @@ namespace Api.Controllers
         }
 
 
+        [HttpGet("GetAllCategories")]
+        public async Task<ActionResult> GetAllCategories()
+        {
+            
+            try
+            {
+                List<Category> categories =  _context.Categories.ToList();
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+
+        }
+
+
+
 
         [HttpPost("CreateCategory")]
 
@@ -61,7 +80,6 @@ namespace Api.Controllers
             }
         }
 
-
         [HttpPost("CreateSubCategory")]
 
         public async Task<ActionResult> CreateSubCategory([FromBody] PostSubCategoryModel model)
@@ -69,22 +87,23 @@ namespace Api.Controllers
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
 
+
             if (roles.Contains("root") || roles.Contains("admin"))
             {
-                
-                // Under uppbyggnad
-                SubCategory subCat = new SubCategory();
 
+                var q = _context.Categories
+                    .Where(x => x.Id == x.Id);
+                SubCategory subCat = new SubCategory
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    CategoryId = model.CategoryId
 
-                var apa2 = _context.Categories
-                 .FirstOrDefault();
+                };
+              
+                //var findRightCat = _context.Categories
+                //        .Where(x => x.Title == model.Category);
 
-                subCat.CategoryId = apa2.Id;
-                subCat.Title = model.Title;
-                subCat.Description = model.Description;
-                var findRightCat = _context.Categories
-                        .Where(x => x.Title == model.Category);
-                
                 try
                 {
                     _context.SubCategories.Add(subCat);
