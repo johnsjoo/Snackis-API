@@ -105,7 +105,6 @@ namespace Api.Controllers
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
 
-
             if (roles.Contains("root") || roles.Contains("admin"))
             {
 
@@ -138,31 +137,24 @@ namespace Api.Controllers
                 return Unauthorized();
             }
         }
-        [HttpGet("AllReportedPosts")]
 
-        public async Task<ActionResult> GetAllReportedPosts()
+        [HttpGet("reportAll")]
+        public async Task<ActionResult> GetReportedPosts()
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
-            List<Post> ReportedPosts = new List<Post>();
-            if (roles.Contains("root") || roles.Contains("admin"))
+
+            if (roles.Contains("admin") || roles.Contains("root"))
             {
+                var reportedPosts = _context.Posts
+                .Where(x => x.IsReported == true).ToList();
+
                 try
                 {
-                    List<Post> AllPosts = _context.Posts.ToList();
-                    foreach (var post in AllPosts)
-                    {
-                        if (post.IsReported == true)
-                        {
-                            ReportedPosts.Add(post);
-                        }
-                    }
-                    return Ok(ReportedPosts);
-                    
+                    return Ok(reportedPosts);
                 }
                 catch (Exception ex)
                 {
-
                     return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
                 }
             }
@@ -170,6 +162,7 @@ namespace Api.Controllers
             {
                 return Unauthorized();
             }
+
         }
     }
 }

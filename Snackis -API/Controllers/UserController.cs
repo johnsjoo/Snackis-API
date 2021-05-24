@@ -47,6 +47,82 @@ namespace Api.Controllers
             }
         }
 
+        [HttpGet("profile/{id}")]
+        public async Task<ActionResult> GetProfile(string Id)
+        {
+            User user = await _userManager.FindByIdAsync(Id);
+
+            if (user != null)
+            {
+                return Ok(user);
+            }
+            else
+            {
+                return StatusCode(404, new { message = "User does not exist" });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterNewUser([FromBody] RegisterModel model) 
+        {
+            User user = new User 
+            {
+                UserName = model.Username,
+                Email = model.Email,
+                FullName = model.FullName,
+                PhoneNumber = model.Phone,
+                PhoneNumberConfirmed = false,
+                EmailConfirmed = false,
+
+            };
+            if (user.UserName.Contains(' '))
+            {
+                return BadRequest("wrong username");
+            }
+            var userExists = await _userManager.FindByNameAsync(model.Username);
+            var mailExists = await _userManager.FindByEmailAsync(model.Email);
+            if (userExists!=null)
+            {
+                return BadRequest("There is alrerady an account with this username");  
+            }
+            if (mailExists != null)
+            {
+                return BadRequest("There is alrerady an account with this email");
+            }
+
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+
+                User newUser = await _userManager.FindByNameAsync(user.UserName);
+
+                await _userManager.AddToRoleAsync(newUser, "User");
+
+                UserSettings settings = new UserSettings()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    DarkMode = true,
+                    User = newUser
+                };
+
+                UserGDPR gdpr = new UserGDPR()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UseMyData = false,
+                    User = newUser
+                };
+
+                _context.UserSettings.Add(settings);
+                _context.UserGDPR.Add(gdpr);
+                _context.SaveChanges();
+
+
+            }
+            return Ok(user.Id);
+        }
+
         [HttpGet("toggleGDPR")]
         public async Task<ActionResult> ToggleGDPR()
         {
