@@ -30,6 +30,23 @@ namespace Api.Controllers
             _signInManager = signInManager;
         }
 
+        [AllowAnonymous]
+        [HttpGet("all")]
+
+        public async Task<ActionResult> GetAll()
+        {
+            try
+            {
+                List<Post> posts = _context.Posts.ToList();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+        }
+
 
 
         [HttpPost("create")]
