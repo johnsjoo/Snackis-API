@@ -85,6 +85,38 @@ namespace Api.Controllers
             return Unauthorized();
         }
 
+        [HttpPut("report/{postId}")]
+
+        public async Task<ActionResult> ReportPost([FromRoute] string postId)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+            if (user != null)
+            {
+                Post post = _context.Posts.Where(x => x.Id == postId).FirstOrDefault();
+
+                post.IsReported = true;
+                
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return Ok();
+
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+
+        }
+        
 
     }
 }

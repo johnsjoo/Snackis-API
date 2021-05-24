@@ -138,5 +138,38 @@ namespace Api.Controllers
                 return Unauthorized();
             }
         }
+        [HttpGet("AllReportedPosts")]
+
+        public async Task<ActionResult> GetAllReportedPosts()
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+            List<Post> ReportedPosts = new List<Post>();
+            if (roles.Contains("root") || roles.Contains("admin"))
+            {
+                try
+                {
+                    List<Post> AllPosts = _context.Posts.ToList();
+                    foreach (var post in AllPosts)
+                    {
+                        if (post.IsReported == true)
+                        {
+                            ReportedPosts.Add(post);
+                        }
+                    }
+                    return Ok(ReportedPosts);
+                    
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
     }
 }
