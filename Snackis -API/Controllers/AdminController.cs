@@ -27,7 +27,7 @@ namespace Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("GetAllCategories")]
+        [HttpGet("getAllCategories")]
         public async Task<ActionResult> GetAllCategories()
         {
             
@@ -47,7 +47,7 @@ namespace Api.Controllers
 
 
 
-        [HttpPost("CreateCategory")]
+        [HttpPost("createCategory")]
 
         public async Task<ActionResult> CreateCategory([FromBody] PostCategoryModel model)
         {
@@ -98,7 +98,7 @@ namespace Api.Controllers
 
         }
 
-        [HttpPost("CreateSubCategory")]
+        [HttpPost("createSubCategory")]
 
         public async Task<ActionResult> CreateSubCategory([FromBody] PostSubCategoryModel model)
         {
@@ -138,7 +138,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("reportAll")]
+        [HttpGet("reportedPosts")]
         public async Task<ActionResult> GetReportedPosts()
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
@@ -157,6 +157,45 @@ namespace Api.Controllers
                 {
                     return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
                 }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+        }
+
+        [HttpPut("reviewReportedPost/{rPostId}")]
+
+        public async Task<ActionResult> ReviewReportedPosts([FromRoute] string rPostId)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("admin") || roles.Contains("root"))
+            {
+                try
+                {
+                    Post post = _context.Posts.Where(x => x.Id == rPostId).FirstOrDefault();
+                    if (post.IsReported == true)
+                    {
+                        post.IsReported = false;
+                    }
+                    else
+                    {
+                        post.IsReported = true;
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return Ok();
+
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+
             }
             else
             {
