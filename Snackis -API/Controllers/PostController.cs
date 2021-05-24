@@ -32,7 +32,7 @@ namespace Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("all")]
-
+        // Not returning with user information
         public async Task<ActionResult> GetAll()
         {
             try
