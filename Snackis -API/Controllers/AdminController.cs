@@ -26,7 +26,7 @@ namespace Api.Controllers
             _userManager = userManager;
         }
 
-
+        [AllowAnonymous]
         [HttpGet("GetAllCategories")]
         public async Task<ActionResult> GetAllCategories()
         {
@@ -78,6 +78,24 @@ namespace Api.Controllers
             {
                 return Unauthorized();
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("getAllSubCategories")]
+
+        public async Task<ActionResult> GetAllSubCategories()
+        {
+            try
+            {
+                List<SubCategory> SubCategories = _context.SubCategories.ToList();
+                return Ok(SubCategories);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+
         }
 
         [HttpPost("CreateSubCategory")]
