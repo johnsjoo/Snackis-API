@@ -34,7 +34,7 @@ namespace Api.Controllers
             try
             {
                 List<Category> categories =  _context.Categories.ToList();
-                return Ok(categories);
+                return  Ok(categories);
             }
             catch (Exception ex)
             {
@@ -101,8 +101,6 @@ namespace Api.Controllers
 
                 };
               
-                //var findRightCat = _context.Categories
-                //        .Where(x => x.Title == model.Category);
 
                 try
                 {

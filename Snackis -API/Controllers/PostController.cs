@@ -42,21 +42,14 @@ namespace Api.Controllers
 
             if (user != null)
             {
-                //var allSubCategorys = _context.SubCategories.ToList();
-                //foreach (var subCategory in allSubCategorys)
-                //{
-                //    subCategorysIds.Add(subCategory.Id);
 
-                //}
-                //SubCategory subCat = new SubCategory { 
-                
-                //};
                 Post post = new Post
                 {
                     Title = model.Title,
                     Content = model.Content,
                     Date = DateTime.Now,
-                    UserId = user.Id
+                    UserId = user.Id,
+                    SubCategoryId = model.SubCategoryId
                     
                 };
 
