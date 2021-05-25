@@ -26,12 +26,11 @@ namespace Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
             // you should get this key from secret place instead. A config file should be enough. 
-            var key = Encoding.ASCII.GetBytes("default-key-xxxx-aaaa-qqqq-default-key-xxxx-aaaa-qqqq");
+            var key = Encoding.ASCII.GetBytes(Configuration["Keys:SignatureKey"]);
 
             // add and setup the authenticaion with jwt bearer default. As well as storing the key
             services.AddAuthentication(x =>

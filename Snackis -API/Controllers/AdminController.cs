@@ -108,8 +108,6 @@ namespace Api.Controllers
             if (roles.Contains("root") || roles.Contains("admin"))
             {
 
-                var q = _context.Categories
-                    .Where(x => x.Id == x.Id);
                 SubCategory subCat = new SubCategory
                 {
                     Title = model.Title,
@@ -165,9 +163,9 @@ namespace Api.Controllers
 
         }
 
-        [HttpPut("reviewReportedPost/{rPostId}")]
+        [HttpPut("reviewReportedPost/{PostId}")]
 
-        public async Task<ActionResult> ReviewReportedPosts([FromRoute] string rPostId)
+        public async Task<ActionResult> ReviewReportedPosts([FromRoute] string PostId)
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
@@ -176,7 +174,7 @@ namespace Api.Controllers
             {
                 try
                 {
-                    Post post = _context.Posts.Where(x => x.Id == rPostId).FirstOrDefault();
+                    Post post = _context.Posts.Where(x => x.Id == PostId).FirstOrDefault();
                     if (post.IsReported == true)
                     {
                         post.IsReported = false;

@@ -69,7 +69,7 @@ namespace Api.Controllers
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
 
-                    return Ok(new { Token = tokenString });
+                    return Ok(new { Token = tokenString, UserID = user.Id });
                 }
                 else
                 {
@@ -85,73 +85,65 @@ namespace Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> RegisterNewUser([FromBody] RegisterModel model)
         {
-            // Always better with a global try catch
-
-            User newUser = new User()
+            User user = new User
             {
-                Email = model.Email,
                 UserName = model.Username,
-                // Its always best practice to have some form of verification. this is off for simplicity
+                Email = model.Email,
+                FullName = model.FullName,
+                PhoneNumber = model.Phone,
+                PhoneNumberConfirmed = false,
                 EmailConfirmed = false,
-                // Set your customs
-                //MyProperty = 13
+
             };
+            if (user.UserName.Contains(' '))
+            {
+                return BadRequest("wrong username");
+            }
+            var userExists = await _userManager.FindByNameAsync(model.Username);
+            var mailExists = await _userManager.FindByEmailAsync(model.Email);
+            if (userExists != null)
+            {
+                return BadRequest("There is alrerady an account with this username");
+            }
+            if (mailExists != null)
+            {
+                return BadRequest("There is alrerady an account with this email");
+            }
 
-            var result = await _userManager.CreateAsync(newUser, model.Password);
 
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                User user = await _userManager.FindByNameAsync(newUser.UserName);
 
-                if (user is not null)
+                User newUser = await _userManager.FindByNameAsync(user.UserName);
+
+                await _userManager.AddToRoleAsync(newUser, "User");
+
+                UserSettings settings = new UserSettings()
                 {
-                    await _userManager.AddToRoleAsync(newUser, "User");
+                    Id = Guid.NewGuid().ToString(),
+                    DarkMode = true,
+                    User = newUser
+                };
 
-                    // Remember to set your custom data and relationships here
-
-                    UserSettings settings = new UserSettings()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        DarkMode = true,
-                        User = user
-                    };
-
-                    UserGDPR gdpr = new UserGDPR()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        UseMyData = false,
-                        User = user
-                    };
-
-                    // Add it to the context
-                    _context.UserSettings.Add(settings);
-                    _context.UserGDPR.Add(gdpr);
-
-                    // Save the data
-                    _context.SaveChanges();
-
-                    return Ok(new { result = $"User {model.Username} has been created", Token = "xxx" });
-                }
-                else
+                UserGDPR gdpr = new UserGDPR()
                 {
-                    return Ok(new { message = "Registration failed for unknown reasons, please try again." });
-                }
+                    Id = Guid.NewGuid().ToString(),
+                    UseMyData = false,
+                    User = newUser
+                };
+
+                _context.UserSettings.Add(settings);
+                _context.UserGDPR.Add(gdpr);
+                _context.SaveChanges();
+
+
             }
-            else
-            {
-                StringBuilder errorString = new StringBuilder();
-
-                foreach (var error in result.Errors)
-                {
-                    errorString.Append(error.Description);
-                }
-
-                return Ok(new { result =  $"Register Fail: {errorString.ToString()}"});
-            }
-
+            return Ok(user.Id);
         }
+
 
         [AllowAnonymous]
         [HttpPost("changepassword")]
