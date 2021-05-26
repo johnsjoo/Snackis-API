@@ -35,12 +35,13 @@ namespace Api.Controllers
         {            
             var posts = _context.Posts.ToList();
             var q = _context.Users.ToList();
+
             foreach (var item in posts)
             {
-                item.User = q.Where(x => x.Id == item.UserId).FirstOrDefault();
+               item.User = q.Where(x => x.Id == item.UserId).FirstOrDefault();
             }
-
-
+            
+   
             try
             {
                 return Ok(posts);
