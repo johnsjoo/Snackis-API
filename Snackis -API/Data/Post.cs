@@ -19,6 +19,8 @@ namespace Api.Data
         public DateTime Date { get; set; }
         public bool IsReported { get; set; }
         public virtual User User { get; set; }
+        public Category Category { get; set; }
+
 
         public Post()
         {

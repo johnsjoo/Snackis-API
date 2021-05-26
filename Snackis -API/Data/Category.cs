@@ -11,6 +11,7 @@ namespace Api.Data
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
+        public ICollection<Post> Posts { get; set; }
 
         public Category()
         {
