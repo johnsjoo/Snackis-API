@@ -29,15 +29,20 @@ namespace Api.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
         [AllowAnonymous]
         [HttpGet("all")]
-        // Not returning with user information
         public async Task<ActionResult> GetAll()
-        {
+        {            
+            var posts = _context.Posts.ToList();
+            var q = _context.Users.ToList();
+            foreach (var item in posts)
+            {
+                item.User = q.Where(x => x.Id == item.UserId).FirstOrDefault();
+            }
+
+
             try
             {
-                List<Post> posts = _context.Posts.ToList();
                 return Ok(posts);
             }
             catch (Exception ex)
@@ -91,7 +96,7 @@ namespace Api.Controllers
             if (user != null)
             {
                 
-                
+    
                 try
                 {
                     Post post = _context.Posts.Where(x => x.Id == postId).FirstOrDefault();
