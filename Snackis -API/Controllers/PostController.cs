@@ -55,8 +55,6 @@ namespace Api.Controllers
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
-            List<string> subCategorysIds = new List<string>();
-
             if (user != null)
             {
 
@@ -65,7 +63,8 @@ namespace Api.Controllers
                     Title = model.Title,
                     Content = model.Content,
                     Date = DateTime.Now,
-                    UserId = user.Id
+                    UserId = user.Id,
+                    CategoryId = model.CategoryId
                     
                 };
 

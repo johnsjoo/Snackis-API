@@ -14,12 +14,14 @@ namespace Api.Data
         public string Id { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
+        [ForeignKey("Category")]
+        public string CategoryId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime Date { get; set; }
         public bool IsReported { get; set; }
         public virtual User User { get; set; }
-        public Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
 
         public Post()

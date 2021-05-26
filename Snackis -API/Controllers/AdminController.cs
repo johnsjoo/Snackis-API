@@ -113,7 +113,7 @@ namespace Api.Controllers
         [HttpPut("reviewReportedPost/{PostId}")]
 
         public async Task<ActionResult> ReviewReportedPosts([FromRoute] string PostId)
-        {
+            {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
 

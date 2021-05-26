@@ -7,7 +7,7 @@ namespace Api.Controllers
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime date { get; set; }
-        public string SubCategoryId { get; set; }
+        public string CategoryId { get; set; }
 
 
 
