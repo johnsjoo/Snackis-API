@@ -17,7 +17,6 @@ namespace Api.Areas.Identity.Data
         public DbSet<UserGDPR> UserGDPR { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<SubCategory> SubCategories { get; set; }
 
 
 

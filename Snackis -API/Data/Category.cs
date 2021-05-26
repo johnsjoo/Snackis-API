@@ -11,7 +11,6 @@ namespace Api.Data
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public virtual IList<SubCategory> SubCategories { get; set; }
 
         public Category()
         {

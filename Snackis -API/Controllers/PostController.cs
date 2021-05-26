@@ -65,8 +65,7 @@ namespace Api.Controllers
                     Title = model.Title,
                     Content = model.Content,
                     Date = DateTime.Now,
-                    UserId = user.Id,
-                    SubCategoryId = model.SubCategoryId
+                    UserId = user.Id
                     
                 };
 

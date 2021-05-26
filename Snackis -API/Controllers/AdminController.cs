@@ -80,61 +80,8 @@ namespace Api.Controllers
             }
         }
 
-        [AllowAnonymous]
-        [HttpGet("getAllSubCategories")]
+ 
 
-        public async Task<ActionResult> GetAllSubCategories()
-        {
-            try
-            {
-                List<SubCategory> SubCategories = _context.SubCategories.ToList();
-                return Ok(SubCategories);
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-            }
-
-        }
-
-        [HttpPost("createSubCategory")]
-
-        public async Task<ActionResult> CreateSubCategory([FromBody] PostSubCategoryModel model)
-        {
-            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
-            var roles = await _userManager.GetRolesAsync(user);
-
-            if (roles.Contains("root") || roles.Contains("admin"))
-            {
-
-                SubCategory subCat = new SubCategory
-                {
-                    Title = model.Title,
-                    Description = model.Description,
-                    CategoryId = model.CategoryId
-
-                };
-              
-
-                try
-                {
-                    _context.SubCategories.Add(subCat);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-
-                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-                }
-
-                return Ok();
-            }
-            else
-            {
-                return Unauthorized();
-            }
-        }
 
         [HttpGet("reportedPosts")]
         public async Task<ActionResult> GetReportedPosts()
