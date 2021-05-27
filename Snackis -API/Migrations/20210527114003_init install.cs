@@ -232,20 +232,48 @@ namespace Api.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "74c44e80-0412-4ae2-8196-03bdbef4a4e8", "root", "ROOT" });
+            migrationBuilder.CreateTable(
+                name: "PostDiscussions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Discussion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsReported = table.Column<bool>(type: "bit", nullable: false),
+                    PostId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostDiscussions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostDiscussions_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PostDiscussions_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "17e0d616-ed29-4655-9deb-33cc50d6bc29", "User", "USER" });
+                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "3e314d4d-96c7-4adf-999b-3d3e42de105b", "root", "ROOT" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "26460dde-3328-41ca-8814-5d0f84d2791a", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "d72c5a50-279b-4413-8a5b-da1da9a0d16b", "admin@core.api", true, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEKYxJObvz2B/KVbJkJvWbw7dU9bJisZoG/ORN0jkpsg8YVovg+0LeAQyTyQc1R1MJA==", null, false, "0826f656-b0d0-4f2c-b51b-9c408f067843", false, "admin" });
+                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "4329b284-e97e-4735-b290-9ff3ed9e7b57", "admin@core.api", true, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEOCmOmdvSeF1XdwH+wRRVlsNGTzPFbmEl3dES0y7AQ3KFHzaxjEl5yDi0RQtWOyMDQ==", null, false, "77689007-0d49-4f07-bd06-7ceb837d1f24", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -292,6 +320,16 @@ namespace Api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PostDiscussions_PostId",
+                table: "PostDiscussions",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostDiscussions_UserId",
+                table: "PostDiscussions",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Posts_CategoryId",
                 table: "Posts",
                 column: "CategoryId");
@@ -320,7 +358,7 @@ namespace Api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                name: "PostDiscussions");
 
             migrationBuilder.DropTable(
                 name: "UserGDPR");
@@ -332,10 +370,13 @@ namespace Api.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

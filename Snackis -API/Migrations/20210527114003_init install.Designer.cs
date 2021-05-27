@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210526090705_init install")]
+    [Migration("20210527114003_init install")]
     partial class initinstall
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,15 +93,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d72c5a50-279b-4413-8a5b-da1da9a0d16b",
+                            ConcurrencyStamp = "4329b284-e97e-4735-b290-9ff3ed9e7b57",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKYxJObvz2B/KVbJkJvWbw7dU9bJisZoG/ORN0jkpsg8YVovg+0LeAQyTyQc1R1MJA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOCmOmdvSeF1XdwH+wRRVlsNGTzPFbmEl3dES0y7AQ3KFHzaxjEl5yDi0RQtWOyMDQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0826f656-b0d0-4f2c-b51b-9c408f067843",
+                            SecurityStamp = "77689007-0d49-4f07-bd06-7ceb837d1f24",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -184,6 +184,35 @@ namespace Api.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("Api.Data.PostDiscussion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discussion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsReported")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PostId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostDiscussions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -214,14 +243,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "74c44e80-0412-4ae2-8196-03bdbef4a4e8",
+                            ConcurrencyStamp = "3e314d4d-96c7-4adf-999b-3d3e42de105b",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "17e0d616-ed29-4655-9deb-33cc50d6bc29",
+                            ConcurrencyStamp = "26460dde-3328-41ca-8814-5d0f84d2791a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -379,6 +408,21 @@ namespace Api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Api.Data.PostDiscussion", b =>
+                {
+                    b.HasOne("Api.Data.Post", "Post")
+                        .WithMany("PostDiscussions")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("Api.Areas.Identity.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -440,6 +484,11 @@ namespace Api.Migrations
             modelBuilder.Entity("Api.Data.Category", b =>
                 {
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Api.Data.Post", b =>
+                {
+                    b.Navigation("PostDiscussions");
                 });
 #pragma warning restore 612, 618
         }

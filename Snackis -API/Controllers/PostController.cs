@@ -35,7 +35,6 @@ namespace Api.Controllers
         {            
             var posts = _context.Posts.ToList();
             var getUsers = _context.Users.ToList();
-            //var getCategories = _context.Categories.ToList();
 
             try
             {
@@ -115,6 +114,45 @@ namespace Api.Controllers
 
 
         }
+        // Funkar inte just nu, måste fixa med postId
+        //[HttpPost("reply")]
+        //public async Task<ActionResult> ReplyPost([FromBody] PostReplyModel model)
+        //{
+        //    User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+        //    var roles = await _userManager.GetRolesAsync(user);
+        //    var getPosts = _context.Posts.ToList();
+        //    if (user != null)
+        //    {
+        //        PostDiscussion postDiscussion = new PostDiscussion
+        //        {
+        //            Discussion = model.Discussion,
+        //            Date = DateTime.Now,
+        //            UserId = user.Id,
+
+        //        };
+        //        foreach (var item in getPosts)
+        //        {
+        //            postDiscussion.Id = item.Id;
+        //        }
+        //        try 
+        //        {
+        //            _context.PostDiscussions.Add(postDiscussion);
+        //            await _context.SaveChangesAsync();
+        //            return Ok();
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //            return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+        //        }
+        //    }
+
+        //    else
+        //    {
+        //        return Unauthorized();
+        //    }
+
+        //}
 
 
     }
