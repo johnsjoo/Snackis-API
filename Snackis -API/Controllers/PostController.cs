@@ -34,14 +34,9 @@ namespace Api.Controllers
         public async Task<ActionResult> GetAll()
         {            
             var posts = _context.Posts.ToList();
-            var q = _context.Users.ToList();
+            var getUsers = _context.Users.ToList();
+            //var getCategories = _context.Categories.ToList();
 
-            foreach (var item in posts)
-            {
-               item.User = q.Where(x => x.Id == item.UserId).FirstOrDefault();
-            }
-            
-   
             try
             {
                 return Ok(posts);
