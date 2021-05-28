@@ -48,6 +48,8 @@ namespace Api.Controllers
             {
 
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+
+                
             }
         }
         //[HttpGet("post/{subId}")]
