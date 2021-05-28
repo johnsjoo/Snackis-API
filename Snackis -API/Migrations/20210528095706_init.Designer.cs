@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210527114003_init install")]
-    partial class initinstall
+    [Migration("20210528095706_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -93,15 +93,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4329b284-e97e-4735-b290-9ff3ed9e7b57",
+                            ConcurrencyStamp = "aa10c997-64b2-4307-8a3b-db6d62c4e2ef",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOCmOmdvSeF1XdwH+wRRVlsNGTzPFbmEl3dES0y7AQ3KFHzaxjEl5yDi0RQtWOyMDQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDYMXlmApCbhj6ns7tFrHc2q59QYhmYnSgHcjh9Tdl9ztF233RTSUjfGg980RBnS3g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "77689007-0d49-4f07-bd06-7ceb837d1f24",
+                            SecurityStamp = "cf2c20d1-f08f-4a50-8a25-47b4abfd89c9",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -243,14 +243,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "3e314d4d-96c7-4adf-999b-3d3e42de105b",
+                            ConcurrencyStamp = "6ad63ec7-f0ba-466c-a38a-307c63865347",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "26460dde-3328-41ca-8814-5d0f84d2791a",
+                            ConcurrencyStamp = "54ff54da-f1f9-4e61-9dc9-d4c6fa003adf",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -395,7 +395,7 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Data.Post", b =>
                 {
-                    b.HasOne("Api.Data.Category", "Category")
+                    b.HasOne("Api.Data.Category", null)
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId");
 
@@ -403,22 +403,18 @@ namespace Api.Migrations
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Category");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Api.Data.PostDiscussion", b =>
                 {
-                    b.HasOne("Api.Data.Post", "Post")
+                    b.HasOne("Api.Data.Post", null)
                         .WithMany("PostDiscussions")
                         .HasForeignKey("PostId");
 
                     b.HasOne("Api.Areas.Identity.Data.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });

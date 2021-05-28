@@ -14,14 +14,15 @@ namespace Api.Data
         public string Id { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
+        [ForeignKey("Post")]
+        public string PostId { get; set; }
         public string Discussion { get; set; }
         public DateTime Date { get; set; }
         public bool IsReported { get; set; }
         public virtual User User { get; set; }
-        public virtual Post Post { get; set; }
+        //public virtual Post Post { get; set; }
 
-
-        public PostDiscussion()
+                public PostDiscussion()
         {
             Id = Guid.NewGuid().ToString();
             IsReported = false;
