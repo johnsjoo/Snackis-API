@@ -37,6 +37,8 @@ namespace Api.Controllers
             var getUsers = _context.Users.ToList();
             var cat = _context.Categories.ToList();
             //var postdisc = _context.PostDiscussions.ToList(); 
+
+
             try
             {
                 return Ok(posts);
