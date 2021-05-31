@@ -29,6 +29,26 @@ namespace Api.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+        [AllowAnonymous]
+        [HttpGet("allDiscussion")]
+        public async Task<ActionResult> GetAllPostDiscussions()
+        {
+            var posts = _context.Posts.ToList();
+            var postdisc = _context.PostDiscussions.ToList();
+
+            try
+            {
+                return Ok(postdisc);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+        }
+
+
         [AllowAnonymous]
         [HttpGet("all")]
         public async Task<ActionResult> GetAll()
@@ -67,8 +87,6 @@ namespace Api.Controllers
                     PostId = model.PostId,
                     UserId = user.Id
                 };
-
-                
 
                 try
                 {

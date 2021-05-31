@@ -1,4 +1,5 @@
 ﻿using Api.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,20 +23,21 @@ namespace Api.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        //[HttpGet("category/{catId}")]
-        //public async Task<IActionResult> GetSubcatId([FromRoute] string catId)
-        //{
-        //    try
-        //    {
-        //        var category = _context.SubCategories
-        //            .Where(x => x.CategoryId == catId).FirstOrDefault();
-        //        return Ok(category);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-        //    }
-        //}
+        [AllowAnonymous]
+        [HttpGet("posts/{catId}")]
+        public async Task<IActionResult> GetPostById([FromRoute] string catId)
+        {
+            try
+            {
+                var posts = _context.Posts
+                    .Where(x => x.CategoryId == catId).FirstOrDefault();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+        }
         [HttpGet("categories")]
         public async Task<IActionResult> GetAllCategories()
         {
