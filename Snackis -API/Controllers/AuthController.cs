@@ -17,7 +17,6 @@ namespace Api.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    // Give it the [Authorize] attribute. It will bypass the autentication without it.  
     [Authorize]
     public class AuthController : ControllerBase
     {
@@ -33,7 +32,6 @@ namespace Api.Controllers
             _signInManager = signInManager;
         }
 
-        // Use [AllowAnonymous] for methods anyone can use, Such as login and register. 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginModel model)

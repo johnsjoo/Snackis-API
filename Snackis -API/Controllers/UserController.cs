@@ -18,7 +18,6 @@ namespace Api.Controllers
 
     [Route("[controller]")]
     [ApiController]
-    // Give it the [Authorize] attribute. It will bypass the autentication without it.  
     [Authorize]
     public class UserController : ControllerBase
     {

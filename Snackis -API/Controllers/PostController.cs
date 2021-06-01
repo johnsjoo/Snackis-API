@@ -31,8 +31,8 @@ namespace Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allDiscussion")]
-        public async Task<ActionResult> GetAllPostDiscussions()
+        [HttpGet("allReplay")]
+        public async Task<ActionResult> GetAllPostReplay()
         {
             var posts = _context.Posts.ToList();
             var postdisc = _context.PostDiscussions.ToList();
@@ -56,7 +56,6 @@ namespace Api.Controllers
             var posts = _context.Posts.ToList();
             var getUsers = _context.Users.ToList();
             var cat = _context.Categories.ToList();
-            //var postdisc = _context.PostDiscussions.ToList(); 
 
 
             try
@@ -69,42 +68,6 @@ namespace Api.Controllers
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
             }
         }
-
-
-        //[HttpPost("CreateDiscussion")]
-        //public async Task<ActionResult> CreateDiscussion([FromBody] PostReplyModel model) 
-        //{
-        //    User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
-        //    var roles = await _userManager.GetRolesAsync(user);
-        //    if (user!= null)
-        //    {
-        //        var p = _context.Posts.ToList();
-                
-        //        PostDiscussion discussion = new PostDiscussion
-        //        {
-        //            Date = model.date,
-        //            Discussion = model.Discussion,
-        //            PostId = model.PostId,
-        //            UserId = user.Id
-        //        };
-
-        //        try
-        //        {
-        //            _context.PostDiscussions.Add(discussion);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //            return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-        //        }
-                
-        //        return Ok();
-                
-        //    }
-        //    return Unauthorized();
-
-        //}
 
 
 
