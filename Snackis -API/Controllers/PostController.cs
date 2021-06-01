@@ -71,40 +71,40 @@ namespace Api.Controllers
         }
 
 
-        [HttpPost("CreateDiscussion")]
-        public async Task<ActionResult> CreateDiscussion([FromBody] PostReplyModel model) 
-        {
-            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
-            var roles = await _userManager.GetRolesAsync(user);
-            if (user!= null)
-            {
-                var p = _context.Posts.ToList();
+        //[HttpPost("CreateDiscussion")]
+        //public async Task<ActionResult> CreateDiscussion([FromBody] PostReplyModel model) 
+        //{
+        //    User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+        //    var roles = await _userManager.GetRolesAsync(user);
+        //    if (user!= null)
+        //    {
+        //        var p = _context.Posts.ToList();
                 
-                PostDiscussion discussion = new PostDiscussion
-                {
-                    Date = model.date,
-                    Discussion = model.Discussion,
-                    PostId = model.PostId,
-                    UserId = user.Id
-                };
+        //        PostDiscussion discussion = new PostDiscussion
+        //        {
+        //            Date = model.date,
+        //            Discussion = model.Discussion,
+        //            PostId = model.PostId,
+        //            UserId = user.Id
+        //        };
 
-                try
-                {
-                    _context.PostDiscussions.Add(discussion);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
+        //        try
+        //        {
+        //            _context.PostDiscussions.Add(discussion);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-                }
+        //            return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+        //        }
                 
-                return Ok();
+        //        return Ok();
                 
-            }
-            return Unauthorized();
+        //    }
+        //    return Unauthorized();
 
-        }
+        //}
 
 
 
@@ -173,45 +173,41 @@ namespace Api.Controllers
 
 
         }
-        // Funkar inte just nu, måste fixa med postId
-        //[HttpPost("reply")]
-        //public async Task<ActionResult> ReplyPost([FromBody] PostReplyModel model)
-        //{
-        //    User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
-        //    var roles = await _userManager.GetRolesAsync(user);
-        //    var getPosts = _context.Posts.ToList();
-        //    if (user != null)
-        //    {
-        //        PostDiscussion postDiscussion = new PostDiscussion
-        //        {
-        //            Discussion = model.Discussion,
-        //            Date = DateTime.Now,
-        //            UserId = user.Id,
+ 
+       [HttpPost("reply")]
+        public async Task<ActionResult> ReplyPost([FromBody] PostReplyModel model)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+            if (user != null)
+            {
+                PostDiscussion postDiscussion = new PostDiscussion
+                {
+                    Discussion = model.Discussion,
+                    Date = DateTime.Now,
+                    UserId = user.Id,
+                    PostId = model.PostId
 
-        //        };
-        //        foreach (var item in getPosts)
-        //        {
-        //            postDiscussion.Id = item.Id;
-        //        }
-        //        try 
-        //        {
-        //            _context.PostDiscussions.Add(postDiscussion);
-        //            await _context.SaveChangesAsync();
-        //            return Ok();
-        //        }
-        //        catch (Exception ex)
-        //        {
+                };
+                try
+                {
+                    _context.PostDiscussions.Add(postDiscussion);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
 
-        //            return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-        //        }
-        //    }
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+            }
 
-        //    else
-        //    {
-        //        return Unauthorized();
-        //    }
+            else
+            {
+                return Unauthorized();
+            }
 
-        //}
+        }
 
 
     }

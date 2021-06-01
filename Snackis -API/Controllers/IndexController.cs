@@ -16,7 +16,7 @@ namespace Api.Controllers
         private Context _context;
 
 
-        public IndexController(Context context, UserManager<User> userManager, SignInManager<User> signInManager)
+        public IndexController(Context context)
         {
             _context = context;
         }
@@ -32,6 +32,22 @@ namespace Api.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+        }
+        [HttpGet("post/{postId}")]
+        public async Task<ActionResult> getReply([FromRoute] string postID)
+        {
+            try
+            {
+                var reply = _context.PostDiscussions
+                   .Where(x => x.PostId == postID).ToList();
+                return Ok(reply);
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" }); 
             }
         }
 
