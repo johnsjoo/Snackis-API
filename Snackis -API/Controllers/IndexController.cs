@@ -14,23 +14,19 @@ namespace Api.Controllers
     public class IndexController : Controller
     {
         private Context _context;
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+
 
         public IndexController(Context context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _context = context;
-            _userManager = userManager;
-            _signInManager = signInManager;
         }
-        [AllowAnonymous]
-        [HttpGet("posts/{catId}")]
+        [HttpGet("{catId}")]
         public async Task<IActionResult> GetPostById([FromRoute] string catId)
         {
             try
             {
                 var posts = _context.Posts
-                    .Where(x => x.CategoryId == catId).FirstOrDefault();
+                    .Where(x => x.CategoryId == catId).ToList();
                 return Ok(posts);
             }
             catch (Exception ex)
@@ -38,6 +34,7 @@ namespace Api.Controllers
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
             }
         }
+
         [HttpGet("categories")]
         public async Task<IActionResult> GetAllCategories()
         {
@@ -54,20 +51,22 @@ namespace Api.Controllers
                 
             }
         }
-        //[HttpGet("post/{subId}")]
-        //public async Task<IActionResult> GetPostById([FromRoute] string subId)
-        //{
-        //    try
-        //    {
-        //        var posts = _context.Posts
-        //            .Where(x => x.SubCategoryId == subId).ToList();
-        //        return Ok(posts);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-        //    }
-        //}
 
+        [HttpGet("/all")]
+        public async Task<ActionResult> GetAllPosts()
+        {
+            try
+            {
+                var allPosts = _context.Posts.ToList();
+                return Ok(allPosts);
+
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" }); 
+            }
+        }
+     
     }
 }
