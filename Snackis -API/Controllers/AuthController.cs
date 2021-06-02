@@ -139,7 +139,7 @@ namespace Api.Controllers
 
 
             }
-            return Ok(user.Id);
+            return Ok(user);
         }
 
 
