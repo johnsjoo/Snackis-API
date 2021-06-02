@@ -23,10 +23,17 @@ namespace Api.Controllers
         [HttpGet("{catId}")]
         public async Task<IActionResult> GetPostById([FromRoute] string catId)
         {
+            var q = _context.Users.ToList();
             try
             {
                 var posts = _context.Posts
                     .Where(x => x.CategoryId == catId).ToList();
+
+                foreach (var item in posts)
+                {
+                    item.User = q.Where(x=>x.Id == item.UserId).FirstOrDefault();
+                }
+                 
                 return Ok(posts);
             }
             catch (Exception ex)
