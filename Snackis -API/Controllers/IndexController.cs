@@ -46,11 +46,10 @@ namespace Api.Controllers
         {
             try
             {
-                //var reply = _context.PostDiscussions
-                //   .Where(x => x.PostId == postID).ToList();
-                
-                
-                return Ok(/*getReply*/);
+                var discussion = _context.PostDiscussions.ToList();
+                var reply = _context.Posts
+                   .Where(x => x.Id == postID).ToList();
+                return Ok(reply);
 
             }
             catch (Exception ex)
