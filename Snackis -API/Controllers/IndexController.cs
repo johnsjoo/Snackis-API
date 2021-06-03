@@ -46,9 +46,11 @@ namespace Api.Controllers
         {
             try
             {
-                var reply = _context.PostDiscussions
-                   .Where(x => x.PostId == postID).ToList();
-                return Ok(reply);
+                //var reply = _context.PostDiscussions
+                //   .Where(x => x.PostId == postID).ToList();
+                
+                
+                return Ok(/*getReply*/);
 
             }
             catch (Exception ex)

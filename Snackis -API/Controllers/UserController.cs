@@ -76,7 +76,7 @@ namespace Api.Controllers
 
                 return Ok(gdpr.UseMyData);
 
-                //return Ok(new { message = $"GDPR has been toggled to {user.GDPR.UseMyData}" });
+                return Ok(new { message = $"GDPR has been toggled to {user.GDPR.UseMyData}" });
             }
             else
             {
