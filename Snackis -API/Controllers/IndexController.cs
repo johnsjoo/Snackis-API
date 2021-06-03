@@ -23,6 +23,7 @@ namespace Api.Controllers
         [HttpGet("{catId}")]
         public async Task<IActionResult> GetPostById([FromRoute] string catId)
         {
+            var c = _context.Categories.ToList();
             var q = _context.Users.ToList();
             try
             {
