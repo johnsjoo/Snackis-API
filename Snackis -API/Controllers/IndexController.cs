@@ -47,9 +47,10 @@ namespace Api.Controllers
         {
             try
             {
+                var user = _context.Users.ToList();
                 var discussion = _context.PostDiscussions.ToList();
                 var reply = _context.Posts
-                   .Where(x => x.Id == postID).ToList();
+                   .Where(x => x.Id == postID).FirstOrDefault();
                 return Ok(reply);
 
             }
