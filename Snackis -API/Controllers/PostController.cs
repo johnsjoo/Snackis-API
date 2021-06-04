@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
-  
+
 
     [Route("[controller]")]
     [ApiController]
@@ -31,7 +31,7 @@ namespace Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("allReplay")]
+        [HttpGet("allReplies")]
         public async Task<ActionResult> GetAllPostReplay()
         {
             var posts = _context.Posts.ToList();
@@ -39,6 +39,7 @@ namespace Api.Controllers
 
             try
             {
+                
                 return Ok(postdisc);
             }
             catch (Exception ex)
@@ -52,7 +53,7 @@ namespace Api.Controllers
         [AllowAnonymous]
         [HttpGet("all")]
         public async Task<ActionResult> GetAll()
-        {            
+        {
             var posts = _context.Posts.ToList();
             var getUsers = _context.Users.ToList();
             var cat = _context.Categories.ToList();
@@ -86,7 +87,7 @@ namespace Api.Controllers
                     Date = DateTime.Now,
                     UserId = user.Id,
                     CategoryId = model.CategoryId
-                    
+
                 };
 
                 try
@@ -111,8 +112,8 @@ namespace Api.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             if (user != null)
             {
-                
-    
+
+
                 try
                 {
                     Post post = _context.Posts.Where(x => x.Id == postId).FirstOrDefault();
@@ -136,8 +137,8 @@ namespace Api.Controllers
 
 
         }
- 
-       [HttpPost("reply")]
+
+        [HttpPost("reply")]
         public async Task<ActionResult> ReplyPost([FromBody] PostReplyModel model)
         {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
@@ -151,12 +152,13 @@ namespace Api.Controllers
                     UserId = user.Id,
                     PostId = model.PostId
 
+
                 };
                 try
                 {
                     _context.PostDiscussions.Add(postDiscussion);
                     await _context.SaveChangesAsync();
-                    return Ok();
+                    return Ok(postDiscussion);
                 }
                 catch (Exception ex)
                 {
@@ -171,7 +173,15 @@ namespace Api.Controllers
             }
 
         }
-
+        [AllowAnonymous]
+        [HttpGet("discussionById/{postId}")]
+        public async Task<ActionResult> GetDiscussionById([FromRoute]string postId) 
+        {
+            
+            var discusson = _context.PostDiscussions
+                .Where(x => x.PostId == postId).ToList();
+            return Ok(discusson);
+        }
 
     }
 }

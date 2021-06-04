@@ -23,6 +23,7 @@ namespace Api.Controllers
         [HttpGet("{catId}")]
         public async Task<IActionResult> GetPostById([FromRoute] string catId)
         {
+            var c = _context.Categories.ToList();
             var q = _context.Users.ToList();
             try
             {
@@ -46,8 +47,10 @@ namespace Api.Controllers
         {
             try
             {
-                var reply = _context.PostDiscussions
-                   .Where(x => x.PostId == postID).ToList();
+                var user = _context.Users.ToList();
+                var discussion = _context.PostDiscussions.ToList();
+                var reply = _context.Posts
+                   .Where(x => x.Id == postID).FirstOrDefault();
                 return Ok(reply);
 
             }

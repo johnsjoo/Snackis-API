@@ -13,6 +13,7 @@ namespace Api.Areas.Identity.Data
     {
 
         public string FullName { get; set; }
+        public string Country { get; set; }
         public virtual UserSettings Settings { get; set; }
         public virtual UserGDPR GDPR { get; set; }
     }

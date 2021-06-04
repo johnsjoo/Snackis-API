@@ -78,44 +78,42 @@ namespace Api.Controllers
             {
                 return Ok("No such user exists");
             }
-        
+
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterNewUser([FromBody] RegisterModel model)
         {
-            User user = new User
+            User newUser = new User()
             {
                 UserName = model.Username,
                 Email = model.Email,
                 FullName = model.FullName,
+                Country = model.Country,
                 PhoneNumber = model.Phone,
                 PhoneNumberConfirmed = false,
-                EmailConfirmed = false,
 
+                EmailConfirmed = false,
             };
-            if (user.UserName.Contains(' '))
+            if (newUser.UserName.Contains(' '))
             {
                 return BadRequest("wrong username");
             }
-            var userExists = await _userManager.FindByNameAsync(model.Username);
-            var mailExists = await _userManager.FindByEmailAsync(model.Email);
-            if (userExists != null)
-            {
-                return BadRequest("There is alrerady an account with this username");
-            }
-            if (mailExists != null)
-            {
-                return BadRequest("There is alrerady an account with this email");
-            }
+            var UserCheck = await _userManager.FindByNameAsync(model.Username);
+            var UserMailCheck = await _userManager.FindByEmailAsync(model.Email);
 
+            if (UserCheck != null)
+                return BadRequest("Username in use");
 
-            var result = await _userManager.CreateAsync(user, model.Password);
+            if (UserMailCheck != null)
+                return BadRequest("E-mail in use");
+
+            var result = await _userManager.CreateAsync(newUser, model.password);
+
             if (result.Succeeded)
             {
-
-                User newUser = await _userManager.FindByNameAsync(user.UserName);
+                User user = await _userManager.FindByNameAsync(newUser.UserName);
 
                 await _userManager.AddToRoleAsync(newUser, "User");
 
@@ -123,59 +121,75 @@ namespace Api.Controllers
                 {
                     Id = Guid.NewGuid().ToString(),
                     DarkMode = true,
-                    User = newUser
+                    User = user
                 };
 
                 UserGDPR gdpr = new UserGDPR()
                 {
                     Id = Guid.NewGuid().ToString(),
                     UseMyData = false,
-                    User = newUser
+                    User = user
                 };
 
                 _context.UserSettings.Add(settings);
                 _context.UserGDPR.Add(gdpr);
-                _context.SaveChanges();
+
+                var userId = await _userManager.GetUserIdAsync(newUser);
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
 
 
+                await _context.SaveChangesAsync();
+
+                var urlContent = Url.Content($"https://localhost:44309/auth/Mailauthentication/{userId}");
+                var link = Url.Content("https://localhost:44384/index");
+
+
+
+                return Ok(newUser);
             }
-            return Ok(user.Id);
+            else
+            {
+                return BadRequest("Registration failed");
+            }
         }
 
-
-        [AllowAnonymous]
-        [HttpPost("changepassword")]
-        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordModel model)
-        {
-
-            if (model.NewPassword == model.ConfirmNewPassword)
+            [AllowAnonymous]
+            [HttpPost("changepassword")]
+            public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordModel model)
             {
-                User user = ToolBox.IsValidEmail(model.User) ? await _userManager.FindByEmailAsync(model.User) : await _userManager.FindByNameAsync(model.User);
 
-                if (user is not null)
+                if (model.NewPassword == model.ConfirmNewPassword)
                 {
-                    if (await _userManager.CheckPasswordAsync(user, model.CurrentPassword))
-                    {
-                        await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                    User user = ToolBox.IsValidEmail(model.User) ? await _userManager.FindByEmailAsync(model.User) : await _userManager.FindByNameAsync(model.User);
 
-                        return Ok(new { message = "Password has been updated." });
+                    if (user is not null)
+                    {
+                        if (await _userManager.CheckPasswordAsync(user, model.CurrentPassword))
+                        {
+                            await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+                            return Ok(new { message = "Password has been updated." });
+                        }
+                        else
+                        {
+                            return Ok(new { message = $"Your password is incorrect. ({user.AccessFailedCount}) failed attempts." });
+                        }
                     }
                     else
                     {
-                        return Ok(new { message = $"Your password is incorrect. ({user.AccessFailedCount}) failed attempts." });
+                        return Ok(new { message = "No such user found." });
                     }
                 }
                 else
                 {
-                    return Ok(new { message = "No such user found." });
+                    return Ok(new { message = "Your password does not match." });
                 }
-            }
-            else
-            {
-                return Ok(new { message = "Your password does not match." });
-            }
-        
-        }
 
+            } 
     }
+
 }
+    
+
+
+
