@@ -90,10 +90,9 @@ namespace Api.Controllers
                 UserName = model.Username,
                 Email = model.Email,
                 FullName = model.FullName,
-                Country = model.Country,
                 PhoneNumber = model.Phone,
+                Image = model.Image,
                 PhoneNumberConfirmed = false,
-
                 EmailConfirmed = false,
             };
             if (newUser.UserName.Contains(' '))

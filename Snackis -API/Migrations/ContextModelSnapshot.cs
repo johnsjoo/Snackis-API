@@ -31,9 +31,6 @@ namespace Api.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -42,6 +39,9 @@ namespace Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -94,15 +94,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "51fa0963-4386-4ea0-af5c-ccd255539c16",
+                            ConcurrencyStamp = "14b4c0d4-3f32-4a8c-9e21-6bb56212c610",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIbwkTxU5/on5hmaEE/xSIR/k6nDGIKeEbXeFAxX0zFZfvNbdg1hPbfOvWjtOmcBog==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ9aE2oDU6dXZc6TAAYQ6hUoo5/kMM/vOa4GcLJ25M1auli4b2AHoXwhYbRaKvtuXw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "02dfc8fa-f9a2-41e5-b96e-59bc2a4b9079",
+                            SecurityStamp = "15c3e015-1278-43bb-8886-37f8d655c12b",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -244,14 +244,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "b0c41951-4661-409e-920b-5ad7bc6bcfc6",
+                            ConcurrencyStamp = "c9b13f30-0cca-4c88-82c8-186fcbb20501",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "8ddde1f7-f791-4efe-95e8-dfdb3789a79f",
+                            ConcurrencyStamp = "8bf03d22-644c-4bf5-8bdc-45010762fcf1",
                             Name = "User",
                             NormalizedName = "USER"
                         });
