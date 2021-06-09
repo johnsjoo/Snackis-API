@@ -112,7 +112,6 @@ namespace Api.Controllers
         }
 
         [HttpPut("reviewReportedPost/{PostId}")]
-
         public async Task<ActionResult> ReviewReportedPosts([FromRoute] string PostId)
             {
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
@@ -135,6 +134,49 @@ namespace Api.Controllers
                     await _context.SaveChangesAsync();
                     return Ok();
 
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+        }
+        [HttpDelete("DeletePostById/{PostId}")]
+        public async Task<ActionResult> DeletePostById([FromRoute] string PostId)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("admin") || roles.Contains("root"))
+            {
+                try
+                {
+                    var postDiscussions = _context.PostDiscussions
+                        .Where(x => x.PostId == PostId).ToList();
+                    Post post = _context.Posts.Where(x => x.Id == PostId).FirstOrDefault();
+                    if (post != null)
+                    {
+
+                        foreach (var item in postDiscussions)
+                        {
+                            _context.PostDiscussions.Remove(item);
+                        }
+                        _context.Posts.Remove(post);
+
+                        
+
+                        await _context.SaveChangesAsync();
+                        
+                    }
+
+                    return Ok();
                 }
                 catch (Exception ex)
                 {
