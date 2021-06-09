@@ -1,4 +1,5 @@
 ﻿using Api.Areas.Identity.Data;
+using Api.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -75,6 +76,22 @@ namespace Api.Controllers
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
 
                 
+            }
+        }
+
+        [HttpGet("CategoryById/{CatId}")]
+        public async Task<IActionResult> GetAllCategories([FromRoute]string CatId)
+        {
+            try
+            {
+                Category category = _context.Categories
+                    .Where(x => x.Id == CatId).FirstOrDefault();
+                return Ok(category);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
             }
         }
 
