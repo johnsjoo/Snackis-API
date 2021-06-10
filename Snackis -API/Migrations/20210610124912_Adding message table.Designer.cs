@@ -4,14 +4,16 @@ using Api.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Api.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210610124912_Adding message table")]
+    partial class Addingmessagetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,15 +96,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "885743a6-993c-4d9a-a89e-3c980cfea0ad",
+                            ConcurrencyStamp = "90a1e773-2fdd-4ac0-87ae-3f36ec3ea09d",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJW5LRwtXQ+bLDzgX+U0zG5oamzSQIzLji5fZwk6ZoLR/xzyrL1EIsZXcYk1jXFfuw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIu0Hwrw1vtC3WXabJog+qq2qQ3FJ+uuLu5jNzCBNC2zm2dYtNGVDyTO+7WwzIycgg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e5a2d964-e434-4efa-b629-64e4c2843e58",
+                            SecurityStamp = "47f649f4-9d2e-42d3-b7f8-b875d9776a48",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -151,30 +153,6 @@ namespace Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Api.Data.Message", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MessageReceiver")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("messages");
                 });
 
             modelBuilder.Entity("Api.Data.Post", b =>
@@ -268,14 +246,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "40c15715-d7d5-4918-b170-5c181f4f7abd",
+                            ConcurrencyStamp = "6f751f0e-33e1-4b7c-9c5e-abe7e4313ee5",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "e6b6bc40-345b-401f-88da-99b8df984ebe",
+                            ConcurrencyStamp = "b81aaad3-59af-4111-b461-fa2d246cf774",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -414,15 +392,6 @@ namespace Api.Migrations
                         .HasForeignKey("Api.Areas.Identity.Data.UserSettings", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Api.Data.Message", b =>
-                {
-                    b.HasOne("Api.Areas.Identity.Data.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
