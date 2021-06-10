@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20210610094252_init install")]
-    partial class initinstall
+    [Migration("20210610141025_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,15 +96,15 @@ namespace Api.Migrations
                         {
                             Id = "admin-c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cde53e65-b069-4832-a875-823eb58cbf1c",
+                            ConcurrencyStamp = "74fa8d5f-9e8c-4b69-aa7d-7a41efb1fe7a",
                             Email = "admin@core.api",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@CORE.API",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEONDGDFonTSYOw+fFBS7gjdqQS1X5Pco9nsMtcym9dQEh8aw4zZ7RIPtKYQsA8x45w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIiBtY3jhgW+tg52ru03RuuUz2xWaORlVJJowvqy4pYsn/oFb7s7q/PAU4fFoLMMLg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a505a9e7-94e4-437e-8946-1063f7379400",
+                            SecurityStamp = "dc4f3fae-41cd-4a82-a54d-5f642033028e",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -153,6 +153,30 @@ namespace Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Api.Data.Message", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MessageReceiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("messages");
                 });
 
             modelBuilder.Entity("Api.Data.Post", b =>
@@ -246,14 +270,14 @@ namespace Api.Migrations
                         new
                         {
                             Id = "root-0c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "8c49f412-19e5-4b14-8e87-cd3da95e02af",
+                            ConcurrencyStamp = "8ff40bed-b9f3-461f-8f05-a1d5d3e0d602",
                             Name = "root",
                             NormalizedName = "ROOT"
                         },
                         new
                         {
                             Id = "user-2c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "b727e391-ec7d-4fa7-823b-0f5b3c046d81",
+                            ConcurrencyStamp = "0af2142f-cae2-4324-a1c5-08653567ddaa",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -392,6 +416,15 @@ namespace Api.Migrations
                         .HasForeignKey("Api.Areas.Identity.Data.UserSettings", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Api.Data.Message", b =>
+                {
+                    b.HasOne("Api.Areas.Identity.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

@@ -31,19 +31,21 @@ namespace Api.Controllers
         [HttpGet("messages")]
         public async Task<ActionResult> GetAllPostReplay()
         {
+
+           
             User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
             var roles = await _userManager.GetRolesAsync(user);
 
+            var users = _context.Users.ToList();
             var myMessages = _context.messages
                 .Where(x => x.UserId == user.Id).ToList();
             var myReplies = _context.messages
                 .Where(x => x.MessageReceiver == user.Id).ToList();
 
-            var conversation = myMessages.Concat(myReplies);
+            var conversation = myMessages.Concat(myReplies).ToList();
 
             try
             {
-
                 return Ok(conversation);
             }
             catch (Exception ex)
@@ -52,7 +54,7 @@ namespace Api.Controllers
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
             }
         }
-
+       
 
         [HttpPost("send")]
         public async Task<ActionResult> SendMessage( [FromBody] MessageModel messageModel)
@@ -65,7 +67,7 @@ namespace Api.Controllers
                 Message message = new Message
                 {
                     UserId = messageModel.UserId,
-                    message = messageModel.message,
+                    message = messageModel.Message,
                     MessageReceiver = messageModel.MessageReceiver,
                     Date = DateTime.Now
                 };
