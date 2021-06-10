@@ -156,6 +156,7 @@ namespace Api.Controllers
                 };
                 try
                 {
+                    var posts = _context.Posts.ToList();
                     _context.PostDiscussions.Add(postDiscussion);
                     await _context.SaveChangesAsync();
                     return Ok(postDiscussion);
