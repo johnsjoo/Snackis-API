@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Api.Migrations
 {
-    public partial class initinstall : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -169,6 +169,27 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "messages",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MessageReceiver = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_messages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserGDPR",
                 columns: table => new
                 {
@@ -264,17 +285,17 @@ namespace Api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "8c49f412-19e5-4b14-8e87-cd3da95e02af", "root", "ROOT" });
+                values: new object[] { "root-0c0-aa65-4af8-bd17-00bd9344e575", "8ff40bed-b9f3-461f-8f05-a1d5d3e0d602", "root", "ROOT" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "b727e391-ec7d-4fa7-823b-0f5b3c046d81", "User", "USER" });
+                values: new object[] { "user-2c0-aa65-4af8-bd17-00bd9344e575", "0af2142f-cae2-4324-a1c5-08653567ddaa", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "Image", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "cde53e65-b069-4832-a875-823eb58cbf1c", "admin@core.api", true, null, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEONDGDFonTSYOw+fFBS7gjdqQS1X5Pco9nsMtcym9dQEh8aw4zZ7RIPtKYQsA8x45w==", null, false, "a505a9e7-94e4-437e-8946-1063f7379400", false, "admin" });
+                values: new object[] { "admin-c0-aa65-4af8-bd17-00bd9344e575", 0, "74fa8d5f-9e8c-4b69-aa7d-7a41efb1fe7a", "admin@core.api", true, null, null, false, null, "ADMIN@CORE.API", "ADMIN", "AQAAAAEAACcQAAAAEIiBtY3jhgW+tg52ru03RuuUz2xWaORlVJJowvqy4pYsn/oFb7s7q/PAU4fFoLMMLg==", null, false, "dc4f3fae-41cd-4a82-a54d-5f642033028e", false, "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -321,6 +342,11 @@ namespace Api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_messages_UserId",
+                table: "messages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PostDiscussions_PostId",
                 table: "PostDiscussions",
                 column: "PostId");
@@ -357,6 +383,9 @@ namespace Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "messages");
 
             migrationBuilder.DropTable(
                 name: "PostDiscussions");
