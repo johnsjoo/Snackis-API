@@ -138,6 +138,41 @@ namespace Api.Controllers
 
         }
 
+
+
+        [HttpPut("discussion/{postDiscussionId}")]
+        public async Task<ActionResult> ReportPostDiscussion([FromRoute] string postDiscussionId)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+            if (user != null)
+            {
+
+
+                try
+                {
+                    PostDiscussion post   = _context.PostDiscussions.Where(x => x.Id == postDiscussionId).FirstOrDefault();
+                    post.IsReported = true;
+
+                    await _context.SaveChangesAsync();
+                    return Ok();
+
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+            }
+            else
+            {
+
+                return Unauthorized();
+            }
+
+
+        }
+
         [HttpPost("reply")]
         public async Task<ActionResult> ReplyPost([FromBody] PostReplyModel model)
         {
