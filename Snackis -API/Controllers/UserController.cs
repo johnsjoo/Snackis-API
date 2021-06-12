@@ -83,5 +83,22 @@ namespace Api.Controllers
                 return StatusCode(404, new { message = "User does not exist" });
             }
         }
+        [HttpGet("allUsers")]
+        public async Task<ActionResult> GetAllUsers()
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var users = _context.Users.ToList();
+            if (user!=null)
+            {
+                return Ok(users);
+
+            }
+            else
+            {
+                return StatusCode(404, new { message = "User does not exist" });
+            }
+ 
+        }
+
     }
 }
