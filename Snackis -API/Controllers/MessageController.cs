@@ -99,26 +99,28 @@ namespace Api.Controllers
             var users = _context.Users.ToList();
             var messages = _context.messages.ToList();
 
-            var result = messages
-                .Where(x => x.MessageReceiver != user.Id).Distinct().ToList();
+            var result = messages.Where(x => x.MessageReceiver == user.Id).ToList();
+            var result1 = messages.Where(x => x.UserId == user.Id).ToList();
 
-            var userIds = result.Select(x => x.MessageReceiver).Distinct().ToList();
-
-            var u = _context.Users.ToList();
-            foreach (var id in userIds)
-            {
-                foreach (var item in u)
-                {
-                    if (item.Id == id)
-                    {
-                        listOfUsers.Add(item);
-                    }
-                }
-            }
+            var q1 = result.Select(x => x.User.Id).ToList();
+            var q2 = result1.Select(x => x.MessageReceiver).ToList();
+            var q3 = q1.Concat(q2).ToList();
 
             try
             {
-                return Ok(listOfUsers);
+                foreach (var item in q3)
+                {
+                    foreach (var userids in users)
+                    {
+                        if (item == userids.Id)
+                        {
+                            listOfUsers.Add(userids);
+                        }
+                    }
+
+                }
+
+                return Ok(listOfUsers.Distinct()) ;
             }
             catch (Exception ex)
             {
