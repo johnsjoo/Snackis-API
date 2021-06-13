@@ -88,5 +88,45 @@ namespace Api.Controllers
 
 
         }
+        [HttpGet("GetUserIdsMessage")]
+        public async Task<ActionResult> Test()
+        {
+            List<User> listOfUsers = new List<User>();
+
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var users = _context.Users.ToList();
+            var messages = _context.messages.ToList();
+
+            var result = messages.Where(x => x.MessageReceiver == user.Id).ToList();
+            var result1 = messages.Where(x => x.UserId == user.Id).ToList();
+
+            var q1 = result.Select(x => x.User.Id).ToList();
+            var q2 = result1.Select(x => x.MessageReceiver).ToList();
+            var q3 = q1.Concat(q2).ToList();
+
+            try
+            {
+                foreach (var item in q3)
+                {
+                    foreach (var userids in users)
+                    {
+                        if (item == userids.Id)
+                        {
+                            listOfUsers.Add(userids);
+                        }
+                    }
+
+                }
+
+                return Ok(listOfUsers.Distinct()) ;
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+            }
+        }
     }
 }
