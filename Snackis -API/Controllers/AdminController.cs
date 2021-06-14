@@ -64,6 +64,7 @@ namespace Api.Controllers
 
                 try
                 {
+                    var users = _context.Users.ToList();
                     _context.Categories.Add(cat);
                     await _context.SaveChangesAsync();
                 }
@@ -92,6 +93,7 @@ namespace Api.Controllers
 
             if (roles.Contains("admin") || roles.Contains("root"))
             {
+                var users = _context.Users.ToList();
                 var reportedPosts = _context.Posts
                 .Where(x => x.IsReported == true).ToList();
 
@@ -110,6 +112,36 @@ namespace Api.Controllers
             }
 
         }
+
+        [HttpGet("reportedDiscussions")]
+        public async Task<ActionResult> GetReportedDiscussions()
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("admin") || roles.Contains("root"))
+            {
+                var users = _context.Users.ToList();
+                var reportedDiscussions = _context.PostDiscussions
+                .Where(x => x.IsReported == true).ToList();
+
+                try
+                {
+                    return Ok(reportedDiscussions);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+        }
+
+
 
         [HttpPut("reviewReportedPost/{PostId}")]
         public async Task<ActionResult> ReviewReportedPosts([FromRoute] string PostId)
@@ -148,6 +180,46 @@ namespace Api.Controllers
             }
 
         }
+
+        [HttpPut("reviewReportedDiscussion/{DiscussionId}")]
+        public async Task<ActionResult> ReviewReportedDiscussion([FromRoute] string DiscussionId)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("admin") || roles.Contains("root"))
+            {
+                try
+                {
+                    PostDiscussion discussion = _context.PostDiscussions.Where(x => x.Id == DiscussionId).FirstOrDefault();
+                    if (discussion.IsReported == true)
+                    {
+                        discussion.IsReported = false;
+                    }
+                    else
+                    {
+                        discussion.IsReported = true;
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return Ok();
+
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+        }
+
+
         [HttpDelete("DeletePostById/{PostId}")]
         public async Task<ActionResult> DeletePostById([FromRoute] string PostId)
         {
@@ -174,6 +246,43 @@ namespace Api.Controllers
 
                         await _context.SaveChangesAsync();
                         
+                    }
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+
+                    return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
+                }
+
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+        }
+        [HttpDelete("DeleteDiscussionById/{DiscussionId}")]
+        public async Task<ActionResult> DeleteDiscussionById([FromRoute] string DiscussionId)
+        {
+            User user = await _userManager.FindByNameAsync(User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name)).Value);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("admin") || roles.Contains("root"))
+            {
+                try
+                {
+                    PostDiscussion postDiscussion = _context.PostDiscussions
+                        .Where(x => x.Id == DiscussionId).FirstOrDefault();
+                    
+                    if (postDiscussion != null)
+                    {
+
+                        _context.PostDiscussions.Remove(postDiscussion);
+
+                        await _context.SaveChangesAsync();
+
                     }
 
                     return Ok();

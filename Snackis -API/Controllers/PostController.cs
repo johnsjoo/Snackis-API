@@ -213,9 +213,9 @@ namespace Api.Controllers
         [HttpGet("discussionById/{postId}")]
         public async Task<ActionResult> GetDiscussionById([FromRoute]string postId) 
         {
-            
+            var users = _context.Users.ToList();
             var discusson = _context.PostDiscussions
-                .Where(x => x.PostId == postId).ToList();
+                .Where(x => x.Id == postId).FirstOrDefault();
             return Ok(discusson);
         }
 

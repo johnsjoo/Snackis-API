@@ -61,6 +61,7 @@ namespace Api.Controllers
                 return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" }); 
             }
         }
+       
 
         [HttpGet("categories")]
         public async Task<IActionResult> GetAllCategories()
