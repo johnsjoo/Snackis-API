@@ -15,8 +15,6 @@ namespace Api.Controllers
     public class IndexController : Controller
     {
         private Context _context;
-
-
         public IndexController(Context context)
         {
             _context = context;
@@ -73,10 +71,7 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-
-                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" });
-
-                
+                return BadRequest(new { message = $"Sorry, something happend. {ex.ToString()}" }); 
             }
         }
 
