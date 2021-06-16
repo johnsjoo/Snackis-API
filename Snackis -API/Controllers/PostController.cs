@@ -54,10 +54,15 @@ namespace Api.Controllers
         [HttpGet("all")]
         public async Task<ActionResult> GetAll()
         {
-            var posts = _context.Posts.ToList();
-            var getUsers = _context.Users.ToList();
             var cat = _context.Categories.ToList();
+            var posts = _context.Posts.ToList();
+            var discussion = _context.PostDiscussions.ToList();
+            var getUsers = _context.Users.ToList();
 
+            foreach (var item in posts)
+            {
+                item.PostDiscussions = discussion.Where(x => x.PostId == item.Id).ToList();
+            }
 
             try
             {
