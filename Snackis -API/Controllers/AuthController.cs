@@ -66,8 +66,9 @@ namespace Api.Controllers
 
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
+                    var roles = await _userManager.GetRolesAsync(user);
 
-                    return Ok(new { Token = tokenString, UserID = user.Id });
+                    return Ok(new { Token = tokenString, UserID = user.Id, Role = roles[0], Username = user.UserName});
                 }
                 else
                 {
