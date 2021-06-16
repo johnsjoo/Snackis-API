@@ -16,6 +16,7 @@ namespace Api
             }
             catch
             {
+
                 return false;
             }
         }
