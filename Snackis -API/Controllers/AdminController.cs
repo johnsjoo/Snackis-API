@@ -61,7 +61,11 @@ namespace Api.Controllers
 
                 cat.Title = model.Title;
                 cat.Description = model.Description;
+                if (string.IsNullOrEmpty(cat.Title))
+                {
+                    return BadRequest("no content");
 
+                }
                 try
                 {
                     var users = _context.Users.ToList();

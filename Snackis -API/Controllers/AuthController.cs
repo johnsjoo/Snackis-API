@@ -52,7 +52,7 @@ namespace Api.Controllers
                     {
 
 
-                        // Add your claims to the JWT token
+                        
                         Subject = new ClaimsIdentity(new Claim[]
                         {
                             new Claim(ClaimTypes.Name, user.UserName),
@@ -116,35 +116,7 @@ namespace Api.Controllers
                 User user = await _userManager.FindByNameAsync(newUser.UserName);
 
                 await _userManager.AddToRoleAsync(newUser, "User");
-
-                UserSettings settings = new UserSettings()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    DarkMode = true,
-                    User = user
-                };
-
-                UserGDPR gdpr = new UserGDPR()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UseMyData = false,
-                    User = user
-                };
-
-                _context.UserSettings.Add(settings);
-                _context.UserGDPR.Add(gdpr);
-
-                var userId = await _userManager.GetUserIdAsync(newUser);
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-
-
                 await _context.SaveChangesAsync();
-
-                var urlContent = Url.Content($"https://localhost:44309/auth/Mailauthentication/{userId}");
-                var link = Url.Content("https://localhost:44384/index");
-
-
-
                 return Ok(newUser);
             }
             else
