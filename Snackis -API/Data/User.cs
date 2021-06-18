@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Api.Areas.Identity.Data
 {
-    // Add profile data for application users by adding properties to the User class
+  
     public class User : IdentityUser
     {
 
@@ -24,7 +24,7 @@ namespace Api.Areas.Identity.Data
         public string Id { get; set; }
         public bool DarkMode { get; set; }
 
-        // assign foreign key (which is the primary key of the parent table, in this case (Id) of user)
+      
         [ForeignKey("Id")]
         public virtual User User { get; set; }
 
